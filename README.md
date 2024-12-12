@@ -1,1 +1,91 @@
 # CELLECT
+# CELLECT (Contrastive Embedding Learning for Large-scale Efficient Cell Tracking)
+The CELLECT tracking framework is designed to extract cell center points from images along with feature vectors representing these points. By incorporating contrastive learning optimization, CELLECT ensures each cell is represented by a distinct feature vector. After training, cell similarity is evaluated based on the distances between their corresponding feature vectors.
+
+The framework comprises three main models:
+1. A primary U-Net model, which takes two consecutive frames as input to extract cell segmentations, center points, features, size estimations, and division estimations.
+2. An MLP model to evaluate whether multiple cells within the same frame belong to the same cell.
+3. A second MLP model to determine whether cells across frames are the same or originate from the same cell, as well as to identify cell division events.
+
+
+
+![CELLECT Image](https://github.com/zzz333za/CELLECT-ctc.ver_2024.10/raw/main/CELLECT.png)
+
+### Requirements
+
+To ensure compatibility, please use the following software versions:
+- **CUDA Version**: 12.4  
+- **Python Version**: 3.11.7
+- **torch**==2.3.1
+
+
+
+## Running Instructions
+
+### Install required packages by running:
+
+```bash
+pip install -r src/requirements.txt
+```
+
+
+---
+
+### Data Processing Module
+
+Before training, sparse annotations must be converted into a matrix format suitable for image-based training. To process the data, use the following command:
+
+python con-label-input.py --data_dir D:/extradata/mskcc-confocal --out_dir C:/Users/try --num 2
+
+Parameters:  
+- data_dir: Path to the original data folder (source: [Zenodo Dataset](zenodo.org/record/6460303))  
+- out_dir: Path to save the processed data (requires hundreds of GB)  
+- num: Identifier for the subset of the data (the original dataset contains three subsets)
+
+#### Data Folder Structure  
+
+```plaintext
+extradata/
+└── mskcc-confocal/
+    ├── mskcc_confocal_s1/
+    ├── mskcc_confocal_s2/
+    └── mskcc_confocal_s3/
+
+```
+---
+### Training the Model
+
+To train the model, use the following command with the specified parameters:
+```bash
+python s-train.py --data_dir D:/extradata/mskcc-confocal   --out_dir C:/Users/try --train 2 --val 2 --model_dir ./model/
+```
+- data_dir: Path to the folder containing the original data.  
+- out_dir: Path to save the processed annotation data.  
+- train: Dataset ID (1-3) used for training.  
+- val: Dataset ID (1-3) used for validation.  
+- model_dir: Path to store the trained model.  
+
+### Test
+
+To run test, use the following command with the specified parameters:
+```bash
+python s-test.py --data_dir D:/extradata/mskcc-confocal   --out_dir C:/Users/z/Desktop/try --model1_dir ./model/U-ext+-x3rdstr0-149.0-3.4599.pth  --model2_dir ./model/EX+-x3rdstr0-149.0-3.4599.pth --model3_dir ./model/EN+-x3rdstr0-149.0-3.4599.pth
+```
+
+Test Parameters    
+- data_dir: Path to the test data folder.  
+- out_dir: Path to save the output results.  
+- resolution_z: Ratio of z-axis resolution to xy resolution.  
+- patch_size_xy: Size of patches in the xy-plane.  
+- patch_size_z: Size of patches in the z-plane.  
+- overlapxy: Overlap size in the xy-plane.  
+- overlapz: Overlap size in the z-axis.  
+- model1_dir, model2_dir, model3_dir: Paths to the three trained model weight files. 
+
+
+
+### Additional Information
+
+In addition to this version, we also developed an advanced version of CELLECT tailored for the Cell Tracking Challenge (CTC). This version demonstrates improved tracking performance and includes an instance segmentation module (the original method uses semantic segmentation). However, due to unoptimized storage requirements for post-segmentation processing, this version is significantly slower.
+
+The advanced version is available at [CELLECT-ctc.ver](github.com/zzz333za/CELLECT-ctc.ver)
