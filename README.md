@@ -25,7 +25,7 @@ To ensure compatibility, please use the following software versions:
 ### Install required packages by running:
 
 ```bash
-pip install -r src/requirements.txt
+pip install -r requirements.txt
 ```
 
 
