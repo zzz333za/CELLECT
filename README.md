@@ -34,9 +34,9 @@ pip install -r src/requirements.txt
 ### Data Processing Module
 
 Before training, sparse annotations must be converted into a matrix format suitable for image-based training. To process the data, use the following command:
-
+```bash
 python con-label-input.py --data_dir D:/extradata/mskcc-confocal --out_dir C:/Users/try --num 2
-
+```
 Parameters:  
 - data_dir: Path to the original data folder (source: [Zenodo Dataset](zenodo.org/record/6460303))  
 - out_dir: Path to save the processed data (requires hundreds of GB)  
@@ -74,12 +74,7 @@ python s-test.py --data_dir D:/extradata/mskcc-confocal   --out_dir C:/Users/z/D
 
 Test Parameters    
 - data_dir: Path to the test data folder.  
-- out_dir: Path to save the output results.  
-- resolution_z: Ratio of z-axis resolution to xy resolution.  
-- patch_size_xy: Size of patches in the xy-plane.  
-- patch_size_z: Size of patches in the z-plane.  
-- overlapxy: Overlap size in the xy-plane.  
-- overlapz: Overlap size in the z-axis.  
+- out_dir: Path to save the output results.    
 - model1_dir, model2_dir, model3_dir: Paths to the three trained model weight files. 
 
 
