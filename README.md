@@ -83,4 +83,4 @@ Test Parameters
 
 In addition, we developed an advanced version of CELLECT optimized for the Cell Tracking Challenge (CTC). This version demonstrates better performance in tracking and segmentation compared to the original, with enhanced precision in the instance segmentation module tailored for high-density embryonic cells (the original method was based on sparse annotations, focusing on center positions and segmentation areas without specifically separating and storing individual cells). As a result, this version is significantly slower, but the performance can be improved by adjusting the file type and precision of the output segmentation files.
 
-The advanced version is available at [CELLECT-ctc.ver](github.com/zzz333za/CELLECT-ctc.ver)
+The advanced version is available at [CELLECT-ctc.ver](https://github.com/zzz333za/CELLECT-ctc.ver)
