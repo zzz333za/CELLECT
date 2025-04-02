@@ -1,4 +1,4 @@
-
+tqdm
 numpy
 Pillow==8.4.0
 scikit-image==0.17.2
