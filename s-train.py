@@ -18,14 +18,9 @@ import torch
 import torch.optim as optim
 
 from torch.utils.data import Dataset
-from tqdm import tqdm_notebook as tqdm
-from matplotlib import pyplot as plt
 import os
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 import random
-from collections import defaultdict
-from sklearn.utils import shuffle
-from sklearn.model_selection import train_test_split
 from tqdm import tqdm as ttm
 import torch.nn as nn
 import torch.nn.functional as F
@@ -34,9 +29,6 @@ import torch.backends.cudnn as cudnn
 import warnings
 from random import randint
 warnings.filterwarnings("ignore")
-
-import collections
-from pprint import pprint
 import numpy as np
 import pandas as pd
 from skimage import measure
@@ -44,21 +36,11 @@ from skimage.measure import label,regionprops
 import cv2
 import numpy as np
 from PIL import Image
-from matplotlib import pyplot as plt
-from ipywidgets import interact
-from scipy.ndimage import rotate,zoom
-from skimage.registration import phase_cross_correlation
-from skimage.registration._phase_cross_correlation import _upsampled_dft
-from scipy.ndimage import fourier_shift
 from tqdm  import tqdm
-from skimage.metrics import structural_similarity as ssim
-from skimage import data, util
 from skimage.measure import label,regionprops
 from recoloss import CrossEntropyLabelSmooth,TripletLoss
-#import lovasz_losses as L
 import random
 import time
-from sklearn.model_selection import KFold
 from unetext3Dn_con7s import UNet3D
 import torch.distributed as dist
 
@@ -1717,10 +1699,14 @@ for epoch in range(n_epochs):
         print('val Loss: {:.4f},uloss:{:.4f},kloss:{:.4f}'.format(np.mean(epoch_loss),np.mean(se/ len(data_loader_val)),np.mean(kk/ len(data_loader_val))))
         if  epoch >2:
             va=epoch_loss
+            if not os.path.exists(mp):
+                os.makedirs(mp, exist_ok=True)
+
+
             torch.save(EX.state_dict(),mp+'/EX+-xstr0-{:.1f}-{:.4f}.pth'.format(epoch,va))
             torch.save(EN.state_dict(),mp+'/EN+-x1rstr0-{:.1f}-{:.4f}.pth'.format(epoch,va))
             torch.save(U.state_dict(),mp+'/U-ext+-xstr0-{:.1f}-{:.4f}.pth'.format(epoch,va))
-            #torch.save(U2,'D:/v/model/U+-{:.1f}-{:.4f}.pth'.format(epoch,va))
+         
 
   
 
