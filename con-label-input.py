@@ -6,10 +6,7 @@ from PIL import Image
 import os
 import numpy as np
 import pandas as pd
-import h5py
 from tqdm import tqdm
-from matplotlib import pyplot as plt
-from skimage import data, util,draw
 import argparse
 
 parser = argparse.ArgumentParser(description="Training script for the model")
