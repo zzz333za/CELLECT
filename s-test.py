@@ -20,13 +20,7 @@ import torch
 import torch.optim as optim
 
 from torch.utils.data import Dataset
-from tqdm import tqdm_notebook as tqdm
-from matplotlib import pyplot as plt
-
 import random
-from collections import defaultdict
-from sklearn.utils import shuffle
-from sklearn.model_selection import train_test_split
 from tqdm import tqdm as ttm
 import torch.nn as nn
 import torch.nn.functional as F
@@ -39,9 +33,6 @@ import numpy as np
 from skimage import io
 
 import pandas as pd
-
-import collections
-from pprint import pprint
 import numpy as np
 import pandas as pd
 from skimage import measure
@@ -49,12 +40,6 @@ from skimage.measure import label,regionprops
 import cv2
 import numpy as np
 from PIL import Image
-from matplotlib import pyplot as plt
-from ipywidgets import interact
-from scipy.ndimage import rotate,zoom
-from skimage.registration import phase_cross_correlation
-from skimage.registration._phase_cross_correlation import _upsampled_dft
-from scipy.ndimage import fourier_shift
 from tqdm  import tqdm
 from skimage.metrics import structural_similarity as ssim
 from skimage import data, util
@@ -62,7 +47,6 @@ from skimage.measure import label,regionprops
 from recoloss import CrossEntropyLabelSmooth,TripletLoss
 
 import random
-import statistics
 from sklearn.model_selection import KFold
 from unetext3Dn_con7s import UNet3D
 
@@ -74,6 +58,7 @@ parser = argparse.ArgumentParser(description="Training script for the model")
 # 添加参数
 parser.add_argument('--data_dir', type=str, required=True, help="Path to the training data directory")
 parser.add_argument('--out_dir', type=str, required=True, help="Path to the output data directory")
+parser.add_argument('--cpu', action='store_true', help="Use CPU instead of GPU if this flag is set.")
 
 parser.add_argument('--model1_dir', type=str, required=True, help="Path to the Unet model")
 parser.add_argument('--model2_dir', type=str, required=True, help="Path to MLP model1")
@@ -310,7 +295,12 @@ SMOOTH = 1e-6
 n_epochs = 150
 batch_size =1
 os.environ['CUDA_VISIBLE_DEVICES']='0'
-device = torch.device("cuda:0")
+if args.cpu:
+    device = 'cpu'
+else:
+    device = torch.device("cuda:0") if torch.cuda.is_available() else 'cpu'
+
+#device = torch.device("cuda:0")
 
 from skimage import draw
 
@@ -511,8 +501,8 @@ def vsup256(U,x,la):
     Uout,uo,foz,zs1,size1 =  U(x)
     Uf=foz.transpose(0,1)
     
-    uc=((kflb(uo[:,:].max(1)[0]).cuda().max(1)[0]==uo[:,4]))*(Uout.argmax(1)==1)#*(size1[:,0]>1)
-    #uc=((kflb(uo[:,:].max(1)[0]).cuda().max(1)[0]==uo[:,4]))*(kfl(Uout.argmax(1)==0).cuda().sum(1)==0)
+    uc=((kflb(uo[:,:].max(1)[0]).to(device).max(1)[0]==uo[:,4]))*(Uout.argmax(1)==1)#*(size1[:,0]>1)
+    #uc=((kflb(uo[:,:].max(1)[0]).to(device).max(1)[0]==uo[:,4]))*(kfl(Uout.argmax(1)==0).to(device).sum(1)==0)
     uc[:,:3]=0
     uc[:,252:]=0
     uc[:,:,:3]=0
@@ -631,7 +621,7 @@ def bvsup256(U,x,l):
 
 img3=tim(Image.open(vD[269])).astype(float)
 img4=tim(Image.open(vD[270])).astype(float)
-labels=torch.zeros(img3.shape).unsqueeze(0).cuda()
+labels=torch.zeros(img3.shape).unsqueeze(0).to(device)
 with torch.no_grad():
     p1,f1,zs1,s1,lb1,uo =  bvsup256(U,(PA(torch.cat([torch.from_numpy(img3).to(device, dtype=torch.float).unsqueeze(0).unsqueeze(0),torch.from_numpy(img4).to(device, dtype=torch.float).unsqueeze(0).unsqueeze(0)],1))),labels)
 def box(x):
