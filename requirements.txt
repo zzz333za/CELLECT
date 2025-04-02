@@ -4,6 +4,6 @@ Pillow==8.4.0
 scikit-image==0.17.2
 scipy
 tifffile==2020.9.3
-torch==1.10.0
+torch==2.3.1
 pandas
 opencv-python
