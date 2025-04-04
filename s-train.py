@@ -123,12 +123,13 @@ l=os.listdir(datap+'/mskcc_confocal_s'+op+'/images/')
 l=[i for i in l if 'tif' in i]
 
 D={}
+om=os.listdir(outp+'/ls'+op+'/')
 for i in tqdm(l):
     if 'tif' in i:         
         
         num=int(i.split('_')[-1].split('.')[0][1:])
         #a=Image.open('D:/mskcc-confocal/mskcc_confocal_s1/images/'+i)
-        if num<275 :
+        if num<275 and str(num)+'-k1-3d-1-imaris' in om:
             
             D[num]=datap+'/mskcc_confocal_s'+op+'/images/'+i
         
@@ -146,14 +147,14 @@ i5=5
 op=str(op2)
 vl=os.listdir(datap+'/mskcc_confocal_s'+op+'/images/')
 vl=[i for i in vl if 'tif' in i]
-
+om=os.listdir(outp+'/ls'+op+'/')
 vD={}
 for i in tqdm(vl):
     if 'tif' in i:         
         
         num=int(i.split('_')[-1].split('.')[0][1:])
         #a=Image.open('D:/mskcc-confocal/mskcc_confocal_s1/images/'+i)
-        if num<275 :
+        if num<275 and str(num)+'-k1-3d-1-imaris' in om:
             
             vD[num]=datap+'/mskcc_confocal_s'+op+'/images/'+i
         
@@ -1704,7 +1705,7 @@ for epoch in range(n_epochs):
 
 
             torch.save(EX.state_dict(),mp+'/EX+-xstr0-{:.1f}-{:.4f}.pth'.format(epoch,va))
-            torch.save(EN.state_dict(),mp+'/EN+-x1rstr0-{:.1f}-{:.4f}.pth'.format(epoch,va))
+            torch.save(EN.state_dict(),mp+'/EN+-xstr0-{:.1f}-{:.4f}.pth'.format(epoch,va))
             torch.save(U.state_dict(),mp+'/U-ext+-xstr0-{:.1f}-{:.4f}.pth'.format(epoch,va))
          
 
