@@ -30,6 +30,31 @@ pip install -r requirements.txt
 
 
 ---
+### Example
+We provide a sample set of commands below to help you quickly set up a clean environment and run the pipeline from scratch:
+```bash
+cd CELLECT/
+conda create -n cellect python=3.11.7 numpy scipy scikit-image -y
+conda activate cellect
+
+pip install -r requirements.txt
+
+# Data preprocessing
+python con-label-input.py --data_dir ../extradata/mskcc-confocal --out_dir ./ --num 2
+
+# Model training
+python s-train.py --data_dir ../extradata/mskcc-confocal --out_dir ./ --train 2 --val 2 --model_dir ./model/
+
+# Model evaluation
+python s-test.py --data_dir ../extradata/mskcc-confocal \
+  --out_dir ./ \
+  --model1_dir ./model/U-ext+-x3rdstr0-149.0-3.4599.pth \
+  --model2_dir ./model/EX+-x3rdstr0-149.0-3.4599.pth \
+  --model3_dir ./model/EN+-x3rdstr0-149.0-3.4599.pth
+
+```
+---
+
 
 ### Data Processing Module
 
@@ -41,7 +66,9 @@ Parameters:
 - data_dir: Path to the original data folder (source: [Zenodo Dataset](https://zenodo.org/record/6460303))  
 - out_dir: Path to save the processed data (requires hundreds of GB)  
 - num: Identifier for the subset of the data (the original dataset contains three subsets)
-
+--start: (Optional) Starting frame index (default: 0)
+--end: (Optional) Ending frame index (default: 275)
+  
 #### Data Folder Structure  
 
 ```plaintext
