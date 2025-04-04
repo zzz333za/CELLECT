@@ -8,12 +8,16 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 import argparse
-
+from skimage import data, util,draw
 parser = argparse.ArgumentParser(description="Training script for the model")
 
 parser.add_argument('--data_dir', type=str, required=True, help="Path to the training data directory")
 parser.add_argument('--out_dir', type=str, required=True, help="Path to the output data directory")
 parser.add_argument('--num', type=str, required=True, help="Dataset id")
+parser.add_argument('--start', type=int, default=0, help="start frame (default: 0)")
+parser.add_argument('--end', type=int, default=275, help="end frame (default: 275)")
+
+
 
 
 
@@ -23,6 +27,8 @@ parser.add_argument('--num', type=str, required=True, help="Dataset id")
 args = parser.parse_args()
 datap=args.data_dir
 outp=args.out_dir
+st=int(args.start)
+ed=int(args.end)
 num=[args.num]
 
 if not os.path.exists(outp+'/ls'+str(num[0])+'/'):
@@ -82,7 +88,7 @@ for op in num:
     d1=pd.read_table(datap+'/mskcc_confocal_s'+op+'/tracks/tracks.txt')#,skiprows=3)
     d2=pd.read_table(datap+'/mskcc_confocal_s'+op+'/tracks/tracks_polar_bodies.txt')#,skiprows=3)
  
-    for t in tqdm(range(0,280)):
+    for t in tqdm(range(st,ed)):
         
         c1=tim(Image.open(D[t]))
  
@@ -154,8 +160,8 @@ for op in num:
                 
         np.save(outp+'/ls'+op+'/'+str(t)+'-k1-3d-1-imaris.npy',im1)
         np.save(outp+'/ls'+op+'/'+str(t)+'-k2-3d-1-imaris.npy',im2)
-        np.save(outp+'/ls'+op+'/'+str(t)+'-k3--3d-1-imaris.npy',im3)
-        np.save(outp+'/ls'+op+'/'+str(t)+'-k4-3d-1-imaris.npy',im4)
+        # np.save(outp+'/ls'+op+'/'+str(t)+'-k3--3d-1-imaris.npy',im3)
+        # np.save(outp+'/ls'+op+'/'+str(t)+'-k4-3d-1-imaris.npy',im4)
         np.save(outp+'/ls'+op+'/'+str(t)+'-k5-3d-1-imaris.npy',im5)
         np.save(outp+'/ls'+op+'/'+str(t)+'-k6-3d-1-imaris.npy',im6)
         np.save(outp+'/ls'+op+'/'+str(t)+'-k1-3d-imaris.npy',im21)    
