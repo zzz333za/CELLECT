@@ -128,8 +128,8 @@ for i in tqdm(l):
     if 'tif' in i:         
         
         num=int(i.split('_')[-1].split('.')[0][1:])
-        #a=Image.open('D:/mskcc-confocal/mskcc_confocal_s1/images/'+i)
-        if num<275 and str(num)+'-k1-3d-1-imaris' in om:
+
+        if num<275 :
             
             D[num]=datap+'/mskcc_confocal_s'+op+'/images/'+i
         
@@ -153,8 +153,8 @@ for i in tqdm(vl):
     if 'tif' in i:         
         
         num=int(i.split('_')[-1].split('.')[0][1:])
-        #a=Image.open('D:/mskcc-confocal/mskcc_confocal_s1/images/'+i)
-        if num<275 and str(num)+'-k1-3d-1-imaris' in om:
+       
+        if num<275 :
             
             vD[num]=datap+'/mskcc_confocal_s'+op+'/images/'+i
         
