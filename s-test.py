@@ -47,7 +47,6 @@ from skimage.measure import label,regionprops
 from recoloss import CrossEntropyLabelSmooth,TripletLoss
 
 import random
-from sklearn.model_selection import KFold
 from unetext3Dn_con7s import UNet3D
 
 import argparse
@@ -1136,91 +1135,88 @@ for step, batch in enumerate(tk0):
         #if step==2:ada
  
 #######################################################################
-# Integrate data, remove excessively short paths, and output trajectories
-long={}
-TR={}
-TRl={}
-KD={}
-nKD={}
-FKD={}
-no={}
-nid=1
-S={}
-E={}
 
-for t in ZZ:
-    trn={}
-    tl=[]
-    if t==0:
-        for i in ZZ[t]:
-            trn[nid]=i
-            TRl[nid]=TRl.get(nid,[])+[i]
-            S[nid]=t
-            nid+=1
-        TR[t]=trn
-    trn={}
-    otrn={}
-    for i in TR[t]:
-        otrn[TR[t][i]]=i
-    
+# Integrate data, remove excessively short paths, and output trajectories
+tit={}
+cidn=1
+tidn=1
+cid={}
+tid={}
+t=0
+qid={}
+pid={}
+did={}
+temp=PZ[t].copy()
+tmp={}
+for i in ZZ[t]:
+    if (isinstance(ZZ[t][i], list) and len(ZZ[t][i]) > 0) :
+        cid[cidn]=[cidn,tidn,t,temp[i][0].item(),temp[i][1].item(),temp[i][2].item(),-1]
+        tid[tidn]=tid.get(tidn,[])+[cidn]
+        tit[tidn]=tit.get(tidn,[])+[t]
+        for j in ZZ[t][i].copy():
+            tmp[j]=cidn
+        cidn+=1
+        tidn+=1
+   
+
+t=1
+for t in tqdm(range(1,267)):
+    ntmp={}
     for i in ZZ[t]:
-        if i not in otrn:
-            otrn[i]=nid
-            TR[t][nid]=i
-            TRl[nid]=TRl.get(nid,[])+[i]
-            S[nid]=t
-            nid+=1
-        j= ZZ[t][i]
-        if len(j)==0:
-            E[otrn[i]]=t
-        elif len(j)==1:
+    
+        temp=PZ[t]
+        bemp=PZ[t-1]
+        pi=tmp.get(i,-1)
+        if pi in cid:
+            ti=cid[pi][1]
+        else:
+            tidn+=1
+            ti=tidn
+        cid[cidn]=[cidn,ti,t,temp[i][0].item(),temp[i][1].item(),temp[i][2].item(),pi]
+        tid[ti]=tid.get(ti,[])+[cidn]
+        tit[ti]=tit.get(ti,[])+[t]
+        for j in ZZ[t][i].copy():
+                ntmp[j]=cidn
+        cidn+=1
+    tmp=ntmp.copy()
+
+plink={}
+for i in cid:
+    plink[i]=cid[i][-1]
+link={}
+for i in plink:
+    link[plink[i]]=link.get(plink[i],[])+[i]
+no=[]
+for i in tit:    
+   if len(tit[i])<3 and max(tit[i])<260 and max(tid[i]) not in link and min(tit[i])>0:
+       no.append(i)
+for i in cid.copy():
+    if cid[i][1] in no:
+        cid.pop(i)
         
-            trn[otrn[i]]=j[0]
-            TRl[otrn[i]]=TRl.get(otrn[i],[])+j
-        elif len(j)>1:
-            l=[]
-            E[otrn[i]]=t
-            for k in j:
-                trn[nid]=k
-                FKD[nid]=otrn[i]
-                TRl[nid]=TRl.get(nid,[])+[k]
-                l.append(nid)
-                S[nid]=t+1
-                nid+=1
-            KD[otrn[i]]=l
-        TR[t+1]=trn
-T={}      
-for t in range(268):
-    tl=[]
-    for i in TR[t]:
-        if len(TRl[i])>6 or i in KD or S[i]>260 :
-            j=TR[t][i]
-            if j in PZ[t]:
-                pj=PZ[t][j]
-                tl.append([i,pj[0],pj[1],pj[2],S[i],E.get(i,S[i]+len(TRl[i])),FKD.get(i,-1)])
-    T[t]=tl
 D=pd.DataFrame()
 lt,l1,l2,l3,l4,l5,l6,l7=[],[],[],[],[],[],[],[]
-for t in T:
-    for i in T[t]:
-        lt.append(t)
-        l1.append(i[0])
-        l2.append(i[1])
-        l3.append(i[2])
-        l4.append(i[3])
-        l5.append(i[4])
-        l6.append(i[5])
-        l7.append(i[6])
-D['t']=lt
-D['trackid']=l1
-D['x']=l2
-D['y']=l3
-D['z']=l4
-D['start']=l5
-D['end']=l6
-D['parent']=l7
+for i in cid:
+        pi=cid[i]
+   
+        l1.append(pi[0])
+        l2.append(pi[1])
+        l3.append(pi[2])
+        l4.append(pi[3])
+        l5.append(pi[4])
+        l6.append(pi[5])
+        l7.append(pi[6])
+#D['t']=lt
+D['cellid']=l1
+D['trackid']=l2
+D['t']=l3
+D['x']=l4
+D['y']=l5
+D['z']=l6
+D['parentid']=l7
 
-D.to_csv('track.csv',index=False)
+D.to_csv('track-result.csv',index=False)
+
 
 
 
