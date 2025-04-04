@@ -66,8 +66,8 @@ Parameters:
 - data_dir: Path to the original data folder (source: [Zenodo Dataset](https://zenodo.org/record/6460303))  
 - out_dir: Path to save the processed data (requires hundreds of GB)  
 - num: Identifier for the subset of the data (the original dataset contains three subsets)
---start: (Optional) Starting frame index (default: 0)
---end: (Optional) Ending frame index (default: 275)
+- start: (Optional) Starting frame index (default: 0)
+- end: (Optional) Ending frame index (default: 275)
   
 #### Data Folder Structure  
 
