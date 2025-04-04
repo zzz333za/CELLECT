@@ -82,7 +82,7 @@ extradata/
 ---
 ### Training the Model
 
-To train the model, use the following command with the specified parameters:
+To train the model, use the following command with the specified parameters (suitable for a single dataset with frames 0–270):
 ```bash
 python s-train.py --data_dir D:/extradata/mskcc-confocal   --out_dir C:/Users/try --train 2 --val 2 --model_dir ./model/
 ```
