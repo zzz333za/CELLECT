@@ -56,6 +56,12 @@ python s-test.py --data_dir ../extradata/mskcc-confocal \
 ---
 
 
+### 📓 Notebook Preview
+
+We provide a full notebook example to demonstrate the pipeline, from data preparation to model evaluation.  
+To preview it online (especially if GitHub cannot render it properly), use the link below:
+https://nbviewer.org/github/zzz333za/CELLECT/blob/main/example-CELLECT.ipynb
+---
 ### Data Processing Module
 
 Before training, sparse annotations must be converted into a matrix format suitable for image-based training. To process the data, use the following command:
