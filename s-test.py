@@ -320,9 +320,9 @@ EX.to(device)
 EN.to(device)
 
 if device=='cpu':
-    U.load_state_dict(torch.load(mp1), map_location='cpu')
-    EX.load_state_dict(torch.load(mp2), map_location='cpu')
-    EN.load_state_dict(torch.load(mp3), map_location='cpu')
+    U.load_state_dict(torch.load(mp1),map_location=torch.device("cpu")
+    EX.load_state_dict(torch.load(mp2),map_location=torch.device("cpu")
+    EN.load_state_dict(torch.load(mp3),map_location=torch.device("cpu")
 else:
     U.load_state_dict(torch.load(mp1))
     EX.load_state_dict(torch.load(mp2))
