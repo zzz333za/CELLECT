@@ -319,11 +319,14 @@ U.to(device)
 EX.to(device)
 EN.to(device)
 
-
-
-U.load_state_dict(torch.load(mp1))
-EX.load_state_dict(torch.load(mp2))
-EN.load_state_dict(torch.load(mp3))
+if device=='cpu':
+    U.load_state_dict(torch.load(mp1), map_location='cpu')
+    EX.load_state_dict(torch.load(mp2), map_location='cpu')
+    EN.load_state_dict(torch.load(mp3), map_location='cpu')
+else:
+    U.load_state_dict(torch.load(mp1))
+    EX.load_state_dict(torch.load(mp2))
+    EN.load_state_dict(torch.load(mp3))
 
 
 print('    Total params: %.2fM' % (sum(p.numel() for p in U.parameters())/1000000.0))
