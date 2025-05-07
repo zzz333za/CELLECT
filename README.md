@@ -49,7 +49,7 @@ python s-test.py --data_dir ../extradata/mskcc-confocal \
   --model2_dir ./model/EX+-x3rdstr0-149.0-3.4599.pth \
   --model3_dir ./model/EN+-x3rdstr0-149.0-3.4599.pth
 
-# Data preprocessing
+# (Optional) Data preprocessing – only needed when training your own model, to speed up loading
 python con-label-input.py --data_dir ../extradata/mskcc-confocal --out_dir ./ --num 2
 
 # Model training
