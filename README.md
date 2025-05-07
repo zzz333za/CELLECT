@@ -42,18 +42,19 @@ pip install -r requirements.txt
 # (Only required on Windows for GPU support)
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
 
-# Data preprocessing
-python con-label-input.py --data_dir ../extradata/mskcc-confocal --out_dir ./ --num 2
-
-# Model training
-python s-train.py --data_dir ../extradata/mskcc-confocal --out_dir ./ --train 2 --val 2 --model_dir ./model/
-
 # Model evaluation
 python s-test.py --data_dir ../extradata/mskcc-confocal \
   --out_dir ./ \
   --model1_dir ./model/U-ext+-x3rdstr0-149.0-3.4599.pth \
   --model2_dir ./model/EX+-x3rdstr0-149.0-3.4599.pth \
   --model3_dir ./model/EN+-x3rdstr0-149.0-3.4599.pth
+
+# Data preprocessing
+python con-label-input.py --data_dir ../extradata/mskcc-confocal --out_dir ./ --num 2
+
+# Model training
+python s-train.py --data_dir ../extradata/mskcc-confocal --out_dir ./ --train 2 --val 2 --model_dir ./model/
+
 
 ```
 ---
