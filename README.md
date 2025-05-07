@@ -38,6 +38,7 @@ conda create -n cellect python=3.11.7 numpy scipy scikit-image -y
 conda activate cellect
 
 pip install -r requirements.txt
+
 # (Only required on Windows for GPU support)
 pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
 
