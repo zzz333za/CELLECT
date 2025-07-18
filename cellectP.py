@@ -116,6 +116,41 @@ def kflb(x):
     return kq
 
 
+def ellipse(r, c, r_radius, c_radius, shape=None):
+
+
+    y, x = np.ogrid[-r_radius:r_radius+1, -c_radius:c_radius+1]
+
+    mask = (y**2)/(r_radius**2) + (x**2)/(c_radius**2) <= 1
+
+    rr_local, cc_local = np.nonzero(mask)
+
+    rr = rr_local + (r - r_radius)
+    cc = cc_local + (c - c_radius)
+
+    if shape is not None:
+        H, W = shape[:2]
+        valid = (rr >= 0) & (rr < H) & (cc >= 0) & (cc < W)
+        rr = rr[valid]
+        cc = cc[valid]
+
+    return rr, cc
+
+def fill(n,x,y,z,v=1,s=4,r=5):
+    rr,cc=ellipse(int(x),int(y), s, s)
+    ir=(rr>0)*(rr<n.shape[0])
+    ic=(cc>0)*(cc<n.shape[1])
+    ii=ir*ic
+    rr=rr[ii]
+    cc=cc[ii]
+    z1=int(max(0,z-1-s//r))
+    z2=int(min(n.shape[2],z+2+s//r))
+
+    if z1==z2:
+        n[rr,cc,z1]=v
+    else:
+        n[rr,cc,z1:z2]=v
+    return n
 
 # Data preprocessing
 
@@ -196,7 +231,8 @@ def bvsup256(U,x,l):
                     v5=v6-polz                               
                 with torch.no_grad():
                     p1,f1,s1,zs1,lb1,ar,uo=  vsup256(U,x[:,:,v1:v2,v3:v4,v5:v6],l[:,v1:v2,v3:v4,v5:v6])  
-                uout[v1+5:v2-5,v3+5:v4-5,v5:v6]=(uo.argmax(1).squeeze().cpu()[5:-5,5:-5]==1).float()
+                #uout[v1+5:v2-5,v3+5:v4-5,v5:v6]=(uo.argmax(1).squeeze().cpu()[5:-5,5:-5]==1).float()
+                uout[v1+4:v2-4,v3+4:v4-4,v5:v6][uout[v1+4:v2-4,v3+4:v4-4,v5:v6]==0]+=(uo.argmax(1).cpu().squeeze()[4:-4,4:-4]==1)[uout[v1+4:v2-4,v3+4:v4-4,v5:v6]==0]
                     
                 ar[ar>1]=1
                 ar=ar.squeeze().cpu()
@@ -236,8 +272,25 @@ def track(inputs,in2,in3,zratio,PA,U,EX,EN):
                 p2,f2,zs2,s2,lb2,uo2 =  bvsup256(U,(PA(torch.cat([in2,in3],1))),in2[:,0]*0) 
     p1=p1[:,1:]
     p2=p2[:,1:]
+  
+    tq=np.zeros(inputs.squeeze().shape)     
+    tq2=np.zeros(inputs.squeeze().shape)   
+    for i in range(p1.shape[0]):
+        x,y,z=p1[i]
+        x=int(x)
+        y=int(y)
+        z=int(z)
+        s=int(s1[i].item()+3)
+        tq=fill(tq,x,y,z,s=max(3,s),r=zratio,v=i+1)
+    for i in range(p2.shape[0]):
+            x,y,z=p2[i]
+            x=int(x)
+            y=int(y)
+            z=int(z)
+            s=int(s2[i].item()+3)
+            tq2=fill(tq2,x,y,z,s=max(3,s),r=zratio,v=i+1)
     p1[:,2]=p1[:,2]*zratio
-    p2[:,2]=p2[:,2]*zratio           
+    p2[:,2]=p2[:,2]*zratio   
     qf,ql,px,gf,gl,py=f1,lb1,p1,f2,lb2,p2
     if p1.shape[0]>0 and p2.shape[0]>0:
 ##############################################################
@@ -555,12 +608,14 @@ def track(inputs,in2,in3,zratio,PA,U,EX,EN):
         o1['size']=s1
         o1['div']=zs1
         o1['seg']=uout
+        o1['seg_mask']=tq*uout.cpu().numpy()
         o1['group']=dx
         o2['pos']=p2
         o2['feature']=f2
         o2['size']=s2
         o2['div']=zs2
         o2['seg']=uo2
+        o2['seg_mask']=tq2*uo2.cpu().numpy()
         o2['group']=dx2  
         Z['frame1']=o1
         Z['frame2']=o2
