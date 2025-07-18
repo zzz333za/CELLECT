@@ -177,8 +177,6 @@ for op in num:
                 
         np.save(outp+'/ls'+op+'/'+str(t)+'-k1-3d-1-imaris.npy',im1)
         np.save(outp+'/ls'+op+'/'+str(t)+'-k2-3d-1-imaris.npy',im2)
-        # np.save(outp+'/ls'+op+'/'+str(t)+'-k3--3d-1-imaris.npy',im3)
-        # np.save(outp+'/ls'+op+'/'+str(t)+'-k4-3d-1-imaris.npy',im4)
         np.save(outp+'/ls'+op+'/'+str(t)+'-k5-3d-1-imaris.npy',im5)
         np.save(outp+'/ls'+op+'/'+str(t)+'-k6-3d-1-imaris.npy',im6)
         np.save(outp+'/ls'+op+'/'+str(t)+'-k1-3d-imaris.npy',im21)    
