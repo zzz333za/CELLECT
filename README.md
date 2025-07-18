@@ -14,9 +14,12 @@ The framework comprises three main models:
 ### Requirements
 
 To ensure compatibility, please use the following software versions:
-- **CUDA Version**: 12.4  
-- **Python Version**: 3.11.7
-- **torch**==2.3.1
+- **CUDA Version**: 12.6
+- **Python Version**: 3.11
+- **torch**>=2.3.1: deep learning framework
+- **tqdm**: displays progress bars during training and evaluation
+- **tifffile**: reads and writes TIFF image files
+- **pandas**: processes tabular data into DataFrames
 
 
 
@@ -34,17 +37,23 @@ pip install -r requirements.txt
 We provide a sample set of commands below to help you quickly set up a clean environment and run the pipeline from scratch:
 ```bash
 cd CELLECT/
-conda create -n cellect python=3.11.7 numpy scipy scikit-image -y
+conda create -n cellect python=3.11 -y
 conda activate cellect
 
 pip install -r requirements.txt
+```
 
-# (Only required on Windows for GPU support)
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
-
+```bash
+# If your CUDA version or platform differs, visit the PyTorch “Get Started” page and copy the install command that matches your setup:
+# https://pytorch.org/get-started/locally
+# (Optional: Windows GPU/CUDA 12.6 example)
+pip install torch torchvision torchaudio \
+    --index-url https://download.pytorch.org/whl/cu126
+```
+```bash
 # Model evaluation
 python s-test.py --data_dir ../extradata/mskcc-confocal \
-  --out_dir ./ \
+  --out_dir ./ --test 2 \
   --model1_dir ./model/U-ext+-x3rdstr0-149.0-3.4599.pth \
   --model2_dir ./model/EX+-x3rdstr0-149.0-3.4599.pth \
   --model3_dir ./model/EN+-x3rdstr0-149.0-3.4599.pth
@@ -62,10 +71,15 @@ python s-train.py --data_dir ../extradata/mskcc-confocal --out_dir ./ --train 2 
 
 ### 📓 Notebook Preview
 
-We provide a full notebook example to demonstrate the pipeline, from data preparation to model evaluation.  
-To preview it online (especially if GitHub cannot render it properly), use the link below:
+We provide two notebook versions to demonstrate the pipeline, from data preparation to model evaluation:
+
+- **Packaged version**: one-click tracking example encapsulating feature extraction, linking, and visualization. Preview online:
 ```bash
-https://nbviewer.org/github/zzz333za/CELLECT/blob/main/example-CELLECT.ipynb
+  https://nbviewer.org/github/zzz333za/CELLECT/blob/main/example-packaged-CELLECT.ipynb
+```
+- **Detail version**: step-by-step breakdown with individual outputs for each pipeline stage. Preview online:
+```bash
+  https://nbviewer.org/github/zzz333za/CELLECT/blob/main/example-detail-CELLECT.ipynb
 ```
 ---
 ### Data Processing Module
@@ -82,14 +96,20 @@ Parameters:
 - end: (Optional) Ending frame index (default: 275)
   
 #### Data Folder Structure  
-
 ```plaintext
 extradata/
 └── mskcc-confocal/
     ├── mskcc_confocal_s1/
     ├── mskcc_confocal_s2/
+    │   └── images/
+    │       ├── mskcc_confocal_s2_t000.tif
+    │       ├── mskcc_confocal_s2_t001.tif
+    │       ├── mskcc_confocal_s2_t002.tif
+    │       ├── mskcc_confocal_s2_t003.tif
+    │       ├── mskcc_confocal_s2_t004.tif
+    │       ├── mskcc_confocal_s2_t005.tif
+    │       └── mskcc_confocal_s2_t006.tif
     └── mskcc_confocal_s3/
-
 ```
 ---
 ### Training the Model
@@ -116,6 +136,7 @@ Test Parameters
 - out_dir: Path to save the output results.    
 - model1_dir, model2_dir, model3_dir: Paths to the three trained model weight files.
 - cpu: Use CPU for inference only. Automatically enabled if no compatible GPU is available.
+- test: Dataset ID (1-3) used for test.
 
 
 
