@@ -130,9 +130,7 @@ for op in num:
             im5[:,:,:]=fill(im5[:,:,:],d['y'].values[i],d['x'].values[i],d['z'].values[i]//5,int(d['div_state'].values[i]),int(d['radius'].values[i])//1,int(d['radius'].values[i])//5)
             im21[:,:,:]=fill(im21[:,:,:],d['y'].values[i],d['x'].values[i],d['z'].values[i]//5,int(d['cell_id'].values[i]+1),int(d['radius'].values[i])//1,int(d['radius'].values[i])//5)
             im31[:,:,:]=fill(im31[:,:,:],d['y'].values[i],d['x'].values[i],d['z'].values[i]//5,float(d['radius'].values[i]),int(d['radius'].values[i])//1,int(d['radius'].values[i])//5)
-            
-            
-            adasdas
+
         for i in (range(d.shape[0])):
     
             #im1[:,:,:]=fill1(im1[:,:,:],d['y'].values[i],d['x'].values[i],d['z'].values[i]//5,int(d['cell_id'].values[i]+1))
