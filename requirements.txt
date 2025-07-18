@@ -1,7 +1,5 @@
 tqdm
-numpy
-Pillow
 tifffile
 torch
 pandas
-opencv-python
+
