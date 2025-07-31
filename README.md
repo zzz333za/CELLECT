@@ -81,7 +81,7 @@ We provide two notebook versions to demonstrate the pipeline, from data preparat
   https://nbviewer.org/github/zzz333za/CELLECT/blob/main/example-detail-CELLECT.ipynb
 ```
 ---
-### Data Processing Module
+### Data Processing Module (only needed when training)
 
 Before training, sparse annotations must be converted into a matrix format suitable for image-based training. To process the data, use the following command:
 ```bash
