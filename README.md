@@ -51,7 +51,7 @@ pip install torch torchvision torchaudio     --index-url https://download.pytorc
 ```
 ```bash
 # Model evaluation
-python s-test.py --data_dir ../extradata/mskcc-confocal \
+python s-test-rename.py --data_dir ../extradata/mskcc-confocal \
   --out_dir ./ --test 2 \
   --model1_dir ./model/U-ext+-x3rdstr0-149.0-3.4599.pth \
   --model2_dir ./model/EX+-x3rdstr0-149.0-3.4599.pth \
@@ -61,7 +61,7 @@ python s-test.py --data_dir ../extradata/mskcc-confocal \
 python con-label-input.py --data_dir ../extradata/mskcc-confocal --out_dir ./ --num 2
 
 # Model training
-python s-train.py --data_dir ../extradata/mskcc-confocal --out_dir ./ --train 2 --val 2 --model_dir ./model/
+python s-train-rename.py --data_dir ../extradata/mskcc-confocal --out_dir ./ --train 2 --val 2 --model_dir ./model/
 
 
 ```
@@ -115,7 +115,7 @@ extradata/
 
 To train the model, use the following command with the specified parameters (suitable for a single dataset with frames 0–270):
 ```bash
-python s-train.py --data_dir ../extradata/mskcc-confocal --out_dir ./ --train 2 --val 2 --model_dir ./model/
+python s-train-rename.py --data_dir ../extradata/mskcc-confocal --out_dir ./ --train 2 --val 2 --model_dir ./model/
 ```
 - data_dir: Path to the folder containing the original data.  
 - out_dir: Path to save the processed annotation data.  
@@ -127,7 +127,7 @@ python s-train.py --data_dir ../extradata/mskcc-confocal --out_dir ./ --train 2 
 
 To run test, use the following command with the specified parameters:
 ```bash
-python s-test.py --data_dir ../extradata/mskcc-confocal   --out_dir ./ --test 2  --model1_dir ./model/U-ext+-x3rdstr0-149.0-3.4599.pth   --model2_dir ./model/EX+-x3rdstr0-149.0-3.4599.pth --model3_dir ./model/EN+-x3rdstr0-149.0-3.4599.pth
+python s-test-rename.py --data_dir ../extradata/mskcc-confocal   --out_dir ./ --test 2  --model1_dir ./model/U-ext+-x3rdstr0-149.0-3.4599.pth   --model2_dir ./model/EX+-x3rdstr0-149.0-3.4599.pth --model3_dir ./model/EN+-x3rdstr0-149.0-3.4599.pth
 ```
 
 Test Parameters    
