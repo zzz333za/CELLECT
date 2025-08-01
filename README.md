@@ -61,7 +61,7 @@ python s-test-rename.py --data_dir ../extradata/mskcc-confocal \
 python con-label-input.py --data_dir ../extradata/mskcc-confocal --out_dir ./ --num 2
 
 # Model training
-python s-train-rename.py --data_dir ../extradata/mskcc-confocal --out_dir ./ --train 2 --val 2 --model_dir ./model/
+python s-train-rename.py --data_dir ../extradata/mskcc-confocal --processed_data_dir ./ --train 2 --val 2 --model_dir ./model/
 
 
 ```
@@ -85,7 +85,7 @@ We provide two notebook versions to demonstrate the pipeline, from data preparat
 
 Before training, sparse annotations must be converted into a matrix format suitable for image-based training. To process the data, use the following command:
 ```bash
-python con-label-input.py --data_dir D:/extradata/mskcc-confocal --out_dir C:/Users/try --num 2
+python con-label-input.py --data_dir ../extradata/mskcc-confocal --out_dir ./ --num 2
 ```
 Parameters:  
 - data_dir: Path to the original data folder (source: [Zenodo Dataset](https://zenodo.org/record/6460303))  
@@ -115,10 +115,11 @@ extradata/
 
 To train the model, use the following command with the specified parameters (suitable for a single dataset with frames 0–270):
 ```bash
-python s-train-rename.py --data_dir ../extradata/mskcc-confocal --out_dir ./ --train 2 --val 2 --model_dir ./model/
+python s-train-rename.py --data_dir ../extradata/mskcc-confocal --processed_data_dir ./ --train 2 --val 2 --model_dir ./model/
 ```
 - data_dir: Path to the folder containing the original data.  
-- out_dir: Path to save the processed annotation data.  
+- processed_data_dir: Path to save the processed data generated during preprocessing  
+           (same purpose as in `con-label-input.py`; includes cropped inputs and annotation matrices).
 - train: Dataset ID (1-3) used for training.  
 - val: Dataset ID (1-3) used for validation.  
 - model_dir: Path to store the trained model.  
