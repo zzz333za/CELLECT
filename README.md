@@ -118,8 +118,7 @@ To train the model, use the following command with the specified parameters (sui
 python s-train-rename.py --data_dir ../extradata/mskcc-confocal --processed_data_dir ./ --train 2 --val 2 --model_dir ./model/
 ```
 - data_dir: Path to the folder containing the original data.  
-- processed_data_dir: Path to save the processed data generated during preprocessing  
-           (same purpose as in `con-label-input.py`; includes cropped inputs and annotation matrices).
+- processed_data_dir: Generated npy files (including cropped inputs and annotation matrices) path after running Data Processing Module (should set exactly the same path as --out_dir in  con-label-input.py)
 - train: Dataset ID (1-3) used for training.  
 - val: Dataset ID (1-3) used for validation.  
 - model_dir: Path to store the trained model.  
