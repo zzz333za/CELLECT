@@ -12,8 +12,9 @@ The framework comprises three main models:
 - [How to install](#how-to-install)
 - [Example](#example)
 - [Parameter Description](#parameter-description)
-- [CELLECT Inference Guide](#cellect-inference-guide)
 - [Notebook Preview](#notebook-preview)
+- [CELLECT Inference Guide](#cellect-inference-guide)
+
 
 
 
