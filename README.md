@@ -7,9 +7,16 @@ The framework comprises three main models:
 2. An MLP model to evaluate whether multiple cells within the same frame belong to the same cell.
 3. A second MLP model to determine whether cells across frames are the same or originate from the same cell, as well as to identify cell division events.
 
-
-
 ![CELLECT Image](https://github.com/zzz333za/CELLECT-ctc.ver_2024.10/raw/main/CELLECT.png)
+
+- [How to install](#how-to-install)
+- [Example](#example)
+- [CELLECT Inference Guide](#cellect-inference-guide)
+- [Notebook Preview](#notebook-preview)
+- [Parameter Description](#parameter-description)
+
+
+# How to install
 
 ### Requirements
 
@@ -33,7 +40,7 @@ pip install -r requirements.txt
 
 
 ---
-### Example
+# Example
 We provide a sample set of commands below to help you quickly set up a clean environment and run the pipeline from scratch:
 ```bash
 cd CELLECT/
@@ -68,7 +75,7 @@ python s-train-rename.py --data_dir ../extradata/mskcc-confocal --processed_data
 ---
 
 
-### 📓 Notebook Preview
+# Notebook Preview
 
 We provide two notebook versions to demonstrate the pipeline, from data preparation to model evaluation:
 
@@ -76,11 +83,102 @@ We provide two notebook versions to demonstrate the pipeline, from data preparat
 ```bash
   https://nbviewer.org/github/zzz333za/CELLECT/blob/main/example-packaged-CELLECT.ipynb
 ```
+![CELLECT Image](https://github.com/zzz333za/CELLECT/main/notebook.png)
 - **Detail version**: step-by-step breakdown with individual outputs for each pipeline stage. Preview online:
 ```bash
   https://nbviewer.org/github/zzz333za/CELLECT/blob/main/example-detail-CELLECT.ipynb
 ```
+
+
+
+# CELLECT Inference Guide
+
+This guide describes how to run inference using the CELLECT framework, focusing on generating cell tracking results from a folder of 3D image frames.
+
+## Overview
+
+The inference pipeline processes a folder of 3D `.tif` or `.tiff` files (supporting formats like `file_3.tif`, `image_t004.tif`, `frame5.tiff`, etc.), automatically sorting them based on embedded frame numbers. It uses a trained model to detect cell centers, track them over time, and output structured tracking information.
+
+Each pair of consecutive frames is processed to produce per-frame CSV outputs. These contain cell IDs, positions, sizes, parent IDs (for division), and consistent track IDs. Results are incrementally accumulated across frames and also stored as a final full tracking CSV file.
+
+
+## Input Folder Structure
+
+Place the raw 3D image frames in a single directory. Supported naming examples:
+
+```
+input_folder/
+├── sample_1.tif
+├── sample_2.tif
+├── sample_3.tif
+├── cell_t004.tif
+├── cell_t005.tif
+├── exp_frame6.tiff
+```
+
+The system will extract embedded numbers, sort them by frame index, and process in order.
+
 ---
+
+## How to Run
+
+```bash
+python inference.py \
+    --data_dir /path/to/image_folder \
+    --out_dir /path/to/output_folder \
+    --model1_dir ./model/U-ext+-x3rd-149.0-4.6540.pth \
+    --model2_dir ./model/EX+-x3rd-149.0-4.6540.pth \
+    --model3_dir ./model/EN+-x3rd-149.0-4.6540.pth 
+```
+
+You can additionally specify optional parameters for preprocessing and behavior control.
+
+---
+
+## Parameter Description
+
+| Parameter       | Type     | Default  | Description |
+|----------------|----------|----------|-------------|
+| `--data_dir`   | string   | required | Path to folder containing input 3D image frames |
+| `--out_dir`    | string   | required | Output directory for result CSVs |
+| `--model1_dir` | string   | required | Path to trained U-Net model file |
+| `--model2_dir` | string   | required | Path to intra-frame MLP model |
+| `--model3_dir` | string   | required | Path to inter-frame MLP model |
+| `--cpu`        | flag     | False    | Use CPU only (default: GPU if available) |
+| `--zratio`     | float    | 5        | Ratio of Z resolution to XY resolution |
+| `--suo`        | float    | 1        | Downsampling (max-pool) factor in XY plane |
+| `--high`       | int      | 65535    | Intensity cap (values above are clipped) |
+| `--low`        | int      | 0        | Minimum intensity clamp (values below are raised) |
+| `--thresh0`    | int      | 0        | Threshold under which values are zeroed |
+| `--div`        | int      | 0        | Enable (1) or disable (0) division detection |
+| `--enhance`    | float    | 1        | Response amplification factor for the model |
+
+---
+
+## Output
+
+- **Per-frame CSVs**: After processing each 100 steps, a temporary CSV file named like `0.csv` is saved to the output directory.
+- **Final CSV**: Once all frames are processed, a complete tracking CSV is generated with all time steps merged.
+
+### CSV Content Columns
+
+| Column     | Description |
+|------------|-------------|
+| `t`        | Frame index (starting from 1) |
+| `cellid`   | Unique cell instance ID within frame |
+| `x,y,z`    | Cell centroid coordinates |
+| `size`     | Estimated object size |
+| `parentid` | Parent cell ID in previous frame (for division events) |
+| `px,py,pz` | Coordinates of parent cell |
+| `trackid`  | Unique tracking ID assigned across time |
+
+Note: Points with track lengths shorter than 3 frames are present in intermediate CSVs but removed from the final full result.
+
+
+
+
+# Parameter Description
+
 ### Data Processing Module (only needed when training)
 
 Before training, sparse annotations must be converted into a matrix format suitable for image-based training. To process the data, use the following command:
