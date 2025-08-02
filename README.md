@@ -11,9 +11,10 @@ The framework comprises three main models:
 
 - [How to install](#how-to-install)
 - [Example](#example)
+- [Parameter Description](#parameter-description)
 - [CELLECT Inference Guide](#cellect-inference-guide)
 - [Notebook Preview](#notebook-preview)
-- [Parameter Description](#parameter-description)
+
 
 
 # How to install
@@ -77,6 +78,66 @@ python s-train-rename.py --data_dir ../extradata/mskcc-confocal --processed_data
 
 
 ```
+
+
+# Parameter Description
+
+### Data Processing Module (only needed when training)
+
+Before training, sparse annotations must be converted into a matrix format suitable for image-based training. To process the data, use the following command:
+```bash
+python con-label-input.py --data_dir ../extradata/mskcc-confocal --out_dir ./ --num 2
+```
+Parameters:  
+- data_dir: Path to the original data folder (source: [Zenodo Dataset](https://zenodo.org/record/6460303))  
+- out_dir: Path to save the processed data (requires hundreds of GB)  
+- num: Identifier for the subset of the data (the original dataset contains three subsets)
+- start: (Optional) Starting frame index (default: 0)
+- end: (Optional) Ending frame index (default: 275)
+  
+#### Data Folder Structure  
+```plaintext
+extradata/
+└── mskcc-confocal/
+    ├── mskcc_confocal_s1/
+    ├── mskcc_confocal_s2/
+    │   └── images/
+    │       ├── mskcc_confocal_s2_t000.tif
+    │       ├── mskcc_confocal_s2_t001.tif
+    │       ├── mskcc_confocal_s2_t002.tif
+    │       ├── mskcc_confocal_s2_t003.tif
+    │       ├── mskcc_confocal_s2_t004.tif
+    │       ├── mskcc_confocal_s2_t005.tif
+    │       └── mskcc_confocal_s2_t006.tif
+    └── mskcc_confocal_s3/
+```
+---
+### Training the Model
+
+To train the model, use the following command with the specified parameters (suitable for a single dataset with frames 0–270):
+```bash
+python s-train-rename.py --data_dir ../extradata/mskcc-confocal --processed_data_dir ./ --train 2 --val 2 --model_dir ./model/
+```
+- data_dir: Path to the folder containing the original data.  
+- processed_data_dir: Generated npy files (including cropped inputs and annotation matrices) path after running Data Processing Module (should set exactly the same path as --out_dir in  con-label-input.py conduct prompt)
+- train: Dataset ID (1-3) used for training.  
+- val: Dataset ID (1-3) used for validation.  
+- model_dir: Path to store the trained model.  
+
+### Test
+
+To run test, use the following command with the specified parameters:
+```bash
+python s-test-rename.py --data_dir ../extradata/mskcc-confocal   --out_dir ./ --test 2  --model1_dir ./model/U-ext+-x3rdstr0-149.0-3.4599.pth   --model2_dir ./model/EX+-x3rdstr0-149.0-3.4599.pth --model3_dir ./model/EN+-x3rdstr0-149.0-3.4599.pth
+```
+
+Test Parameters    
+- data_dir: Path to the test data folder.  
+- out_dir: Path to save the output results.    
+- model1_dir, model2_dir, model3_dir: Paths to the three trained model weight files.
+- cpu: Use CPU for inference only. Automatically enabled if no compatible GPU is available.
+- test: Dataset ID (1-3) used for test.
+
 ---
 
 
@@ -180,65 +241,6 @@ You can additionally specify optional parameters for preprocessing and behavior 
 Note: Points with track lengths shorter than 3 frames are present in intermediate CSVs but removed from the final full result.
 
 
-
-
-# Parameter Description
-
-### Data Processing Module (only needed when training)
-
-Before training, sparse annotations must be converted into a matrix format suitable for image-based training. To process the data, use the following command:
-```bash
-python con-label-input.py --data_dir ../extradata/mskcc-confocal --out_dir ./ --num 2
-```
-Parameters:  
-- data_dir: Path to the original data folder (source: [Zenodo Dataset](https://zenodo.org/record/6460303))  
-- out_dir: Path to save the processed data (requires hundreds of GB)  
-- num: Identifier for the subset of the data (the original dataset contains three subsets)
-- start: (Optional) Starting frame index (default: 0)
-- end: (Optional) Ending frame index (default: 275)
-  
-#### Data Folder Structure  
-```plaintext
-extradata/
-└── mskcc-confocal/
-    ├── mskcc_confocal_s1/
-    ├── mskcc_confocal_s2/
-    │   └── images/
-    │       ├── mskcc_confocal_s2_t000.tif
-    │       ├── mskcc_confocal_s2_t001.tif
-    │       ├── mskcc_confocal_s2_t002.tif
-    │       ├── mskcc_confocal_s2_t003.tif
-    │       ├── mskcc_confocal_s2_t004.tif
-    │       ├── mskcc_confocal_s2_t005.tif
-    │       └── mskcc_confocal_s2_t006.tif
-    └── mskcc_confocal_s3/
-```
----
-### Training the Model
-
-To train the model, use the following command with the specified parameters (suitable for a single dataset with frames 0–270):
-```bash
-python s-train-rename.py --data_dir ../extradata/mskcc-confocal --processed_data_dir ./ --train 2 --val 2 --model_dir ./model/
-```
-- data_dir: Path to the folder containing the original data.  
-- processed_data_dir: Generated npy files (including cropped inputs and annotation matrices) path after running Data Processing Module (should set exactly the same path as --out_dir in  con-label-input.py conduct prompt)
-- train: Dataset ID (1-3) used for training.  
-- val: Dataset ID (1-3) used for validation.  
-- model_dir: Path to store the trained model.  
-
-### Test
-
-To run test, use the following command with the specified parameters:
-```bash
-python s-test-rename.py --data_dir ../extradata/mskcc-confocal   --out_dir ./ --test 2  --model1_dir ./model/U-ext+-x3rdstr0-149.0-3.4599.pth   --model2_dir ./model/EX+-x3rdstr0-149.0-3.4599.pth --model3_dir ./model/EN+-x3rdstr0-149.0-3.4599.pth
-```
-
-Test Parameters    
-- data_dir: Path to the test data folder.  
-- out_dir: Path to save the output results.    
-- model1_dir, model2_dir, model3_dir: Paths to the three trained model weight files.
-- cpu: Use CPU for inference only. Automatically enabled if no compatible GPU is available.
-- test: Dataset ID (1-3) used for test.
 
 
 
