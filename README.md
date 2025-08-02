@@ -37,7 +37,12 @@ To ensure compatibility, please use the following software versions:
 ```bash
 pip install -r requirements.txt
 ```
-
+```bash
+# If your CUDA version or platform differs, visit the PyTorch “Get Started” page and copy the install command that matches your setup:
+# https://pytorch.org/get-started/locally
+# (Optional: Windows GPU/CUDA 12.6 example)
+pip install torch torchvision torchaudio     --index-url https://download.pytorch.org/whl/cu126
+```
 
 ---
 # Example
