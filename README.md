@@ -155,9 +155,8 @@ We provide two notebook versions to demonstrate the pipeline, from data preparat
 
 
 # Run CELLECT on your own dataset
-## CELLECT Inference Guide
 
-The following guideline describes the inference module of CELLECT framework: how to run CELLECT on your own dataset using CELLECT framework，which aims to generate cell tracking results from a folder of 3D image frames.
+The following guideline describes the inference module of CELLECT framework. This section aims to demonstrate how to run CELLECT on your own dataset and generate cell tracking results from a folder of 3D image frames.
 
 The inference pipeline processes a folder of 3D `.tif` or `.tiff` files (supporting formats like `file_3.tif`, `image_t004.tif`, `frame5.tiff`, etc.), automatically sorting them based on embedded frame numbers. It uses a trained model to detect cell centers, track them over time, and output structured tracking information.
 
