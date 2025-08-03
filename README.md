@@ -13,7 +13,7 @@ The framework comprises three main models:
 - [Example](#example)
 - [Parameter Description](#parameter-description)
 - [Notebook Preview](#notebook-preview)
-- [CELLECT Inference Guide](#cellect-inference-guide)
+- [Run CELLECT on your own dataset](#run-cellect-on-your-own-dataset)
 
 
 
@@ -154,8 +154,8 @@ We provide two notebook versions to demonstrate the pipeline, from data preparat
 
 
 
-
-# CELLECT Inference Guide
+# Run CELLECT on your own dataset
+## CELLECT Inference Guide
 
 This guide describes how to run inference using the CELLECT framework, focusing on generating cell tracking results from a folder of 3D image frames.
 
