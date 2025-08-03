@@ -151,10 +151,7 @@ We provide two notebook versions to demonstrate the pipeline, from data preparat
   https://nbviewer.org/github/zzz333za/CELLECT/blob/main/example-packaged-CELLECT.ipynb
 ```
 ![https://github.com/zzz333za/CELLECT/main/notebook.png](https://github.com/zzz333za/CELLECT/blob/main/note.png)
-- **Detail version**: step-by-step breakdown with individual outputs for each pipeline stage. Preview online:
-```bash
-  https://nbviewer.org/github/zzz333za/CELLECT/blob/main/example-detail-CELLECT.ipynb
-```
+
 
 
 
