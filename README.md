@@ -147,9 +147,10 @@ Test Parameters
 We provide two notebook versions to demonstrate the pipeline, from data preparation to model evaluation:
 
 - **Packaged version**: one-click tracking example encapsulating feature extraction, linking, and visualization. Preview online:
-```bash
-  https://nbviewer.org/github/zzz333za/CELLECT/blob/main/example-packaged-CELLECT.ipynb
-```
+
+  - **Option 1**: [View the notebook on nbviewer](https://nbviewer.org/github/zzz333za/CELLECT/blob/main/example-packaged-CELLECT.ipynb) (recommended, but may not always be available).
+  - **Option 2**: [View the notebook on GitHub](https://github.com/zzz333za/CELLECT/blob/main/example-packaged-CELLECT.ipynb) (alternative option if nbviewer is unavailable).
+  
 ![https://github.com/zzz333za/CELLECT/main/notebook.png](https://github.com/zzz333za/CELLECT/blob/main/note.png)
 
 
