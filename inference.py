@@ -72,7 +72,7 @@ feature_extract_net_path = args.model1_dir
 mlp_model1_path = args.model2_dir
 mlp_model2_path = args.model3_dir
 # Additional params
-zratio = int(args.zratio)
+zratio = float(args.zratio)
 suo = args.suo
 high = args.high
 low = args.low
@@ -740,4 +740,5 @@ for step in tqdm(range(len(order_list)-2)):
 cc=track.groupby('trackid')['t'].nunique().rename('countq').reset_index()
 track=track.merge(cc, on='trackid')    
 track=track.loc[track.countq>3] 
+
 track.to_csv(output_dir_path+'track.csv',index=False) 
