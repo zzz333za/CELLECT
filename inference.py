@@ -300,8 +300,8 @@ for step in tqdm(range(len(order_list)-2)):
     prev_frame_sizes = sizes_frame2.clone()
 
     # Project z-coordinate to match physical resolution
-    coords_frame1 = coords_frame1[:, 1:]
-    coords_frame2 = coords_frame2[:, 1:]
+    coords_frame1 = coords_frame1[:, 1:].float()
+    coords_frame2 = coords_frame2[:, 1:].float()
     coords_frame1[:, 2] *= zratio  # scale z
     coords_frame2[:, 2] *= zratio  # scale z
 
@@ -742,3 +742,4 @@ track=track.merge(cc, on='trackid')
 track=track.loc[track.countq>3] 
 
 track.to_csv(output_dir_path+'track.csv',index=False) 
+
