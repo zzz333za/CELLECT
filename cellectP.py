@@ -300,8 +300,8 @@ def track(inputs, in2, in3, zratio, PA, U, EX, EN, div = 1):
                 p1,f1,zs1,s1,lb1,uout =  feature_extract(U,(PA(torch.cat([inputs,in2],1))),inputs[:,0]*0)
 
                 p2,f2,zs2,s2,lb2,uo2 =  feature_extract(U,(PA(torch.cat([in2,in3],1))),in2[:,0]*0) 
-    p1=p1[:,1:]
-    p2=p2[:,1:]
+    p1=p1[:,1:].float()
+    p2=p2[:,1:].float()
       
     tq=np.zeros(inputs.squeeze().shape)     
     tq2=np.zeros(inputs.squeeze().shape)   
@@ -337,8 +337,8 @@ def track(inputs, in2, in3, zratio, PA, U, EX, EN, div = 1):
     zs2=zs2[u]
     s2=s2[u]
     lb2=lb2[u]
-    p1[:,2]=p1[:,2]*1
-    p2[:,2]=p2[:,2]*1
+    p1[:,2]=p1[:,2]*zratio
+    p2[:,2]=p2[:,2]*zratio
     
     qf,ql,px,gf,gl,py=f1,lb1,p1,f2,lb2,p2
     if p1.shape[0]>0 and p2.shape[0]>0:
